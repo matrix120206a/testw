@@ -22,6 +22,9 @@ jobs:
       - name: Connect Tailscale
         run: |
           & "C:\Program Files\Tailscale\tailscale.exe" up --authkey "$env:TAILSCALE_AUTHKEY" --accept-routes
+      
+      - name: Display Tailscale IP
+        run: |
           & "C:\Program Files\Tailscale\tailscale.exe" ip -4
           
       - name: Disable password complexity
