@@ -1,0 +1,165 @@
+name: Testw
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-2025
+    permissions:
+      id-token: write # penting untuk OIDC
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Tailscale
+        run: |
+          Invoke-WebRequest -Uri https://pkgs.tailscale.com/stable/tailscale-setup-latest-amd64.msi -OutFile tailscale.msi
+          Start-Process msiexec.exe -ArgumentList '/i tailscale.msi /quiet' -Wait
+
+      - name: Connect Tailscale
+        run: |
+          $env:TS_AUTHKEY = "tskey-auth-kNd9iSiHQ911CNTRL-2sVB5xHp7xEJDV3BKmptwEFi3awPJrMg"
+          & "C:\Program Files\Tailscale\tailscale.exe" up `
+            --authkey $env:TS_AUTHKEY `
+            --hostname gha-win-01 `
+            --advertise-tags=tag:ci `
+            --accept-routes
+
+      - name: Show status
+        run: |
+          & "C:\Program Files\Tailscale\tailscale.exe" status
+
+      - name: Start Tailscale
+        run: |
+          $env:TAILSCALE_AUTHKEY="tskey-auth-kVv6qvnxx821CNTRL-7rm8Yd5t2S2mbCeNqadoR27U9RAU62rm"
+          & "C:\Program Files\Tailscale\tailscale.exe" up --authkey $env:TAILSCALE_AUTHKEY --accept-routes
+
+      - name: Get Tailscale IP
+        run: |
+          $tailscale_ip = & "C:\Program Files\Tailscale\tailscale.exe" ip -4
+          Write-Host "Tailscale IP: $tailscale_ip"
+          echo "TAILSCALE_IP=$tailscale_ip" >> $GITHUB_ENV
+
+      - name: Disable password complexity
+        run: |
+          secedit /export /cfg $env:TEMP\secpol.cfg
+          (Get-Content $env:TEMP\secpol.cfg).Replace("PasswordComplexity = 1", "PasswordComplexity = 0") | Set-Content $env:TEMP\secpol.cfg
+          secedit /configure /db $env:TEMP\secedit.sdb /cfg $env:TEMP\secpol.cfg /areas SECURITYPOLICY
+          gpupdate /force
+
+      - name: Create user Matrix
+        run: |
+          net user Matrix Matrix#1234 /add
+          net localgroup "Administrators" Matrix /add
+          reg add "HKLM\SOFTWARE\Microsoft\Windows\DWM" /v ForceEffectMode /t REG_DWORD /d 2 /f
+          rundll32.exe themecpl.dll,OpenThemeAction "C:\Windows\resources\Themes\dark.theme"
+          
+
+      - name: Set Default User Profile (Taskbar + Dark Theme + Wallpaper)
+        shell: pwsh
+        run: |
+          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+          $artifactUrl = "https://4kwallpapers.com/images/wallpapers/windows-11-dark-mode-blue-stock-official-3840x2400-5630.jpg"
+          $themeDir    = "C:\Scripts\"
+          $localPath   = Join-Path $themeDir "EnigMano.jpg"
+          New-Item -Path $themeDir -ItemType Directory -Force | Out-Null
+          if (Test-Path $localPath) { Remove-Item $localPath -Force }
+          Invoke-WebRequest -Uri $artifactUrl -OutFile $localPath -UseBasicParsing
+                
+          
+          # Load Default User hive
+          REG LOAD HKLM\Default C:\Users\Default\NTUSER.DAT
+      
+          # Taskbar kiri
+          reg add "HKLM\Default\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v TaskbarAl /t REG_DWORD /d 0 /f
+      
+          # Dark theme (system + apps)
+          reg add "HKLM\Default\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v SystemUsesLightTheme /t REG_DWORD /d 0 /f
+          reg add "HKLM\Default\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v AppsUseLightTheme /t REG_DWORD /d 0 /f
+      
+          # Disable transparency
+          reg add "HKLM\Default\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v EnableTransparency /t REG_DWORD /d 0 /f
+      
+      
+          # Unload hive
+          REG UNLOAD HKLM\Default
+
+          
+      - name: Enable RDP
+        run: |
+          # Aktifkan RDP
+          Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
+          # Izinkan lewat firewall
+          Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+          # Tambahkan user Matrix ke grup (tidak error jika sudah ada)
+          Add-LocalGroupMember -Group "Remote Desktop Users" -Member "Matrix" -ErrorAction SilentlyContinue
+
+      - name: Setup Auto Apply Dark Theme on RDP Login
+        shell: pwsh
+        run: |
+          # Buat folder script
+          New-Item -ItemType Directory -Path C:\Scripts -Force | Out-Null
+          
+          # Simpan script ApplyDarkTheme.ps1
+          @'
+          Start-Process "rundll32.exe" -ArgumentList 'themecpl.dll,OpenThemeAction C:\Windows\resources\Themes\dark.theme'
+          RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters
+          '@ | Out-File -FilePath C:\Scripts\ApplyDarkTheme.ps1 -Encoding UTF8
+          
+          # Daftarkan Scheduled Task untuk user Matrix
+          $Action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Scripts\ApplyDarkTheme.ps1"
+          $Trigger = New-ScheduledTaskTrigger -AtLogOn
+          Register-ScheduledTask -Action $Action -Trigger $Trigger -TaskName "ApplyDarkTheme" -User "Matrix" -Force
+
+
+      - name: Setup Auto Wallpaper on RDP Login
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path C:\Scripts -Force | Out-Null
+
+          # Tulis script baris demi baris biar YAML gak error
+          Set-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '$ErrorActionPreference = "Stop"'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value 'try {'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    $artifactUrl = "https://4kwallpapers.com/images/wallpapers/windows-11-dark-mode-blue-stock-official-3840x2400-5630.jpg"'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    $themeDir    = "C:\Scripts\"'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    $localPath   = Join-Path $themeDir "EnigMano.jpg"'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    New-Item -Path $themeDir -ItemType Directory -Force | Out-Null'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value ''
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value ''
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value ''
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    Add-Type @"'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '        using System.Runtime.InteropServices;'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '        public class EnigManoVisual {'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '            [DllImport("user32.dll", SetLastError = true)]'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '            public static extern bool SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '        }'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '"@'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value ''
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name Wallpaper -Value $localPath'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name WallpaperStyle -Value 10'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name TileWallpaper -Value 0'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    [EnigManoVisual]::SystemParametersInfo(0x0014, 0, $localPath, 0x0001 -bor 0x0002) | Out-Null'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '}'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value 'catch {'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    Write-Error "Wallpaper setup failed: $_"'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    exit 1'
+          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '}'
+
+          # Register Scheduled Task
+          $Action  = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Scripts\SetWallpaper.ps1"
+          $Trigger = New-ScheduledTaskTrigger -AtLogOn
+          Register-ScheduledTask -Action $Action -Trigger $Trigger -TaskName "SetWallpaper" -User "Matrix" -Force
+
+      - name: Set Timezone to Asia/Jakarta
+        shell: pwsh
+        run: |
+          tzutil /s "SE Asia Standard Time"
+
+      - name: Keep session alive
+        run: |
+          Write-Output "Runner is alive. Press Ctrl+C to stop."
+          while ($true) { Start-Sleep -Seconds 300 }
