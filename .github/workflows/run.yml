@@ -21,28 +21,9 @@ jobs:
 
       - name: Connect Tailscale
         run: |
-          $env:TS_AUTHKEY = "tskey-auth-kNd9iSiHQ911CNTRL-2sVB5xHp7xEJDV3BKmptwEFi3awPJrMg"
-          & "C:\Program Files\Tailscale\tailscale.exe" up `
-            --authkey $env:TS_AUTHKEY `
-            --hostname gha-win-01 `
-            --advertise-tags=tag:ci `
-            --accept-routes
-
-      - name: Show status
-        run: |
-          & "C:\Program Files\Tailscale\tailscale.exe" status
-
-      - name: Start Tailscale
-        run: |
-          $env:TAILSCALE_AUTHKEY="tskey-auth-kVv6qvnxx821CNTRL-7rm8Yd5t2S2mbCeNqadoR27U9RAU62rm"
-          & "C:\Program Files\Tailscale\tailscale.exe" up --authkey $env:TAILSCALE_AUTHKEY --accept-routes
-
-      - name: Get Tailscale IP
-        run: |
-          $tailscale_ip = & "C:\Program Files\Tailscale\tailscale.exe" ip -4
-          Write-Host "Tailscale IP: $tailscale_ip"
-          echo "TAILSCALE_IP=$tailscale_ip" >> $GITHUB_ENV
-
+          & "C:\Program Files\Tailscale\tailscale.exe" up --authkey "$env:TAILSCALE_AUTHKEY" --accept-routes
+          & "C:\Program Files\Tailscale\tailscale.exe" ip -4
+          
       - name: Disable password complexity
         run: |
           secedit /export /cfg $env:TEMP\secpol.cfg
