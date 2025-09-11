@@ -95,7 +95,7 @@ jobs:
           
           # Daftarkan Scheduled Task untuk user Matrix
           $Action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Scripts\ApplyDarkTheme.ps1"
-          $Trigger = New-ScheduledTaskTrigger -AtLogOn
+          $Trigger = New-ScheduledTaskTrigger -AtStartup
           Register-ScheduledTask -Action $Action -Trigger $Trigger -TaskName "ApplyDarkTheme" -User "Matrix" -Force
 
 
@@ -135,7 +135,7 @@ jobs:
 
           # Register Scheduled Task
           $Action  = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Scripts\SetWallpaper.ps1"
-          $Trigger = New-ScheduledTaskTrigger -AtLogOn
+          $Trigger = New-ScheduledTaskTrigger -AtStartup
           Register-ScheduledTask -Action $Action -Trigger $Trigger -TaskName "SetWallpaper" -User "Matrix" -Force
 
       - name: Set Timezone to Asia/Jakarta
