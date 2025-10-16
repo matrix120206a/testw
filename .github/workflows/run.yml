@@ -39,10 +39,6 @@ jobs:
           setx ANDROID_SDK_ROOT "C:\ProgramData\Android\android-sdk"
           setx PATH "%PATH%;C:\ProgramData\Android\android-sdk\tools;C:\ProgramData\Android\android-sdk\platform-tools;C:\ProgramData\Android\android-sdk\build-tools"
 
-      - name: Install Android SDK components
-        run: |
-          echo y | "C:\ProgramData\Android\android-sdk\tools\bin\sdkmanager.bat" "platform-tools" "platforms;android-34" "build-tools;34.0.0"
-    
           
       - name: Disable password complexity
         run: |
