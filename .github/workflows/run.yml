@@ -26,6 +26,23 @@ jobs:
       - name: Display Tailscale IP
         run: |
           & "C:\Program Files\Tailscale\tailscale.exe" ip -4
+
+      - name: Install Android Studio
+        run: |
+          choco install -y androidstudio
+          choco install -y android-sdk
+          choco install -y gradle
+
+      - name: Set Android environment variables
+        run: |
+          setx ANDROID_HOME "C:\ProgramData\Android\android-sdk"
+          setx ANDROID_SDK_ROOT "C:\ProgramData\Android\android-sdk"
+          setx PATH "%PATH%;C:\ProgramData\Android\android-sdk\tools;C:\ProgramData\Android\android-sdk\platform-tools;C:\ProgramData\Android\android-sdk\build-tools"
+
+      - name: Install Android SDK components
+        run: |
+          echo y | "C:\ProgramData\Android\android-sdk\tools\bin\sdkmanager.bat" "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+    
           
       - name: Disable password complexity
         run: |
