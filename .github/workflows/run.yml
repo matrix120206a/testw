@@ -40,19 +40,17 @@ jobs:
         run: |
           & "C:\Program Files\Tailscale\tailscale.exe" version
 
-      # 🔐 Login menggunakan OAuth Client ID/Secret
-      - name: Connect to Tailscale via OAuth
+      - name: Connect to Tailscale using reusable key
         shell: pwsh
         run: |
-          Write-Host "🔑 Connecting to Tailscale using OAuth client..."
+          Write-Host "🔑 Connecting to Tailscale using reusable auth key..."
           & "C:\Program Files\Tailscale\tailscale.exe" up `
-            --oauth-client-id "${{ secrets.TS_CLIENT_ID }}" `
-            --oauth-client-secret "${{ secrets.TS_CLIENT_SECRET }}" `
+            --auth-key "$env:TAILSCALE_AUTH_KEY" `
+            --unattended `
             --accept-routes `
             --accept-dns=false `
             --hostname "windows-runner-${{ github.run_id }}"
-          
-          Write-Host "✅ Connected to Tailscale successfully."
+
 
       - name: Display Tailscale IP
         run: |
