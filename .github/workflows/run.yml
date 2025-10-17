@@ -26,19 +26,6 @@ jobs:
       - name: Display Tailscale IP
         run: |
           & "C:\Program Files\Tailscale\tailscale.exe" ip -4
-
-      - name: Install Android Studio
-        run: |
-          choco install -y androidstudio
-          choco install -y android-sdk
-          choco install -y gradle
-
-      - name: Set Android environment variables
-        run: |
-          setx ANDROID_HOME "C:\ProgramData\Android\android-sdk"
-          setx ANDROID_SDK_ROOT "C:\ProgramData\Android\android-sdk"
-          setx PATH "%PATH%;C:\ProgramData\Android\android-sdk\tools;C:\ProgramData\Android\android-sdk\platform-tools;C:\ProgramData\Android\android-sdk\build-tools"
-
           
       - name: Disable password complexity
         run: |
@@ -150,6 +137,24 @@ jobs:
           $Action  = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Scripts\SetWallpaper.ps1"
           $Trigger = New-ScheduledTaskTrigger -AtLogOn
           Register-ScheduledTask -Action $Action -Trigger $Trigger -TaskName "SetWallpaper" -User "Matrix" -Force
+
+      - name: Force GUI Session (Self RDP Login)
+        shell: pwsh
+        run: |
+          Write-Host "Simulating RDP login for user Matrix..."
+          
+          # Start interactive session as Matrix
+          Start-Process -FilePath "cmd.exe" -Credential (New-Object System.Management.Automation.PSCredential("Matrix", (ConvertTo-SecureString "Matrix#1234" -AsPlainText -Force))) -ArgumentList "/c echo Matrix RDP session started" -WindowStyle Hidden
+
+          # Force create desktop session (Session 1)
+          query session | findstr /C:"Matrix" || (
+            Write-Host "Creating local session via tscon..."
+            tscon 1 /dest:console 2>$null
+          )
+
+          # Extra wait to let scheduled tasks trigger
+          Start-Sleep -Seconds 10
+
 
       - name: Set Timezone to Asia/Jakarta
         shell: pwsh
