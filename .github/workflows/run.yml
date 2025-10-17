@@ -19,10 +19,17 @@ jobs:
           Invoke-WebRequest -Uri https://pkgs.tailscale.com/stable/tailscale-setup-latest-amd64.msi -OutFile tailscale.msi
           Start-Process msiexec.exe -ArgumentList '/i tailscale.msi /quiet' -Wait
 
-      - name: Connect Tailscale
+      - name: Login to Tailscale using OAuth
+        shell: pwsh
         run: |
-          & "C:\Program Files\Tailscale\tailscale.exe" up --authkey "$env:TAILSCALE_AUTHKEY" --accept-routes
-      
+          & "C:\Program Files\Tailscale\tailscale.exe" up `
+            --login-server=https://login.tailscale.com `
+            --oauth-client-id=${{ secrets.TS_CLIENT_ID }} `
+            --oauth-client-secret=${{ secrets.TS_CLIENT_SECRET }} `
+            --accept-routes `
+            --accept-dns=false `
+            --hostname=windows-runner
+
       - name: Display Tailscale IP
         run: |
           & "C:\Program Files\Tailscale\tailscale.exe" ip -4
