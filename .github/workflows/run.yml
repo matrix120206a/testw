@@ -269,16 +269,19 @@ jobs:
 
           # Ambil SID user Matrix
           $sid = (New-Object System.Security.Principal.NTAccount("Matrix")).Translate([System.Security.Principal.SecurityIdentifier]).Value
-          $regPath = "HKU\$sid\Control Panel\Desktop"
+          Write-Host "🔍 SID for Matrix: $sid"
 
-          # Pastikan Control Panel\Desktop sudah ada (pakai REG ADD agar aman)
+          # Gunakan REG ADD agar tahan error
           & reg add "HKU\$sid\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d "$wallpaper" /f
 
-          # Update wallpaper secara real-time di user Matrix
+          # Update juga untuk current user context (Matrix session)
           & reg add "HKCU\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d "$wallpaper" /f
+
+          # Terapkan perubahan wallpaper
           RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters
 
           Write-Host "✅ Wallpaper applied successfully for Matrix"
+
 
       - name: Set Timezone to Asia/Jakarta
         shell: pwsh
