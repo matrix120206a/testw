@@ -266,19 +266,19 @@ jobs:
         run: |
           $wallpaper = "D:\a\testw\testw\windows-11-dark-mode-blue-stock-official-3840x2400-5630.jpg"
           Write-Host "🖼️ Setting wallpaper to $wallpaper ..."
-          
-          # Set wallpaper untuk semua user (termasuk Matrix)
-          Set-ItemProperty -path "HKCU:\Control Panel\Desktop\" -name wallpaper -value $wallpaper
+
+          # Ambil SID user Matrix
+          $sid = (New-Object System.Security.Principal.NTAccount("Matrix")).Translate([System.Security.Principal.SecurityIdentifier]).Value
+          $regPath = "HKU\$sid\Control Panel\Desktop"
+
+          # Pastikan Control Panel\Desktop sudah ada (pakai REG ADD agar aman)
+          & reg add "HKU\$sid\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d "$wallpaper" /f
+
+          # Update wallpaper secara real-time di user Matrix
+          & reg add "HKCU\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d "$wallpaper" /f
           RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters
 
-          # Pastikan juga di HKU untuk user Matrix (kalau Matrix belum login)
-          $sid = (New-Object System.Security.Principal.NTAccount("Matrix")).Translate([System.Security.Principal.SecurityIdentifier]).Value
-          $regPath = "Registry::HKEY_USERS\$sid\Control Panel\Desktop"
-          if (-not (Test-Path $regPath)) {
-            New-Item -Path $regPath -Force | Out-Null
-          }
-          Set-ItemProperty -Path $regPath -Name wallpaper -Value $wallpaper
-          Write-Host "✅ Wallpaper applied to user Matrix"
+          Write-Host "✅ Wallpaper applied successfully for Matrix"
 
       - name: Set Timezone to Asia/Jakarta
         shell: pwsh
