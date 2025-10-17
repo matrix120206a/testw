@@ -257,26 +257,11 @@ jobs:
       
           Write-Host "✅ Semua script Matrix sudah dijalankan lewat scheduled task."
 
-      - name: Set wallpaper for Matrix user
-        shell: pwsh
+      - name: Replace the image file
         run: |
-          $wallpaper = "D:\a\testw\testw\windows-11-dark-mode-blue-stock-official-3840x2400-5630.jpg"
-          Write-Host "🖼️ Setting wallpaper to $wallpaper ..."
-
-          # Ambil SID user Matrix
-          $sid = (New-Object System.Security.Principal.NTAccount("Matrix")).Translate([System.Security.Principal.SecurityIdentifier]).Value
-          Write-Host "🔍 SID for Matrix: $sid"
-
-          # Gunakan REG ADD agar tahan error
-          & reg add "HKU\$sid\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d "$wallpaper" /f
-
-          # Update juga untuk current user context (Matrix session)
-          & reg add "HKCU\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d "$wallpaper" /f
-
-          # Terapkan perubahan wallpaper
-          RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters
-
-          Write-Host "✅ Wallpaper applied successfully for Matrix"
+          # Ganti file lama dengan yang baru dari D:\a\testw\testw\
+          copy "D:\a\testw\testw\windows-11-dark-mode-blue-stock-official-3840x2400-5630.jpg" "C:\Windows\Web\4K\Wallpaper\Windows\img19_1920x1200.jpg"
+        shell: pwsh
 
 
       - name: Set Timezone to Asia/Jakarta
