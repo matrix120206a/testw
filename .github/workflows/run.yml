@@ -14,23 +14,45 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Check built-in Tailscale version
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          if (Test-Path "C:\Program Files\Tailscale\tailscale.exe") {
+            & "C:\Program Files\Tailscale\tailscale.exe" version
+          } else {
+            Write-Host "❌ Tailscale belum terpasang di runner ini."
+          }
+
+      # 🧩 Install versi terbaru Tailscale (biar ada dukungan OAuth)
       - name: Install latest Tailscale
         shell: pwsh
         run: |
+          Write-Host "⬇️ Downloading latest Tailscale..."
           Invoke-WebRequest https://pkgs.tailscale.com/stable/tailscale-setup-latest.exe -OutFile tailscale-installer.exe
+          Write-Host "🚀 Installing Tailscale..."
           Start-Process -FilePath .\tailscale-installer.exe -ArgumentList "/quiet" -Wait
+          Write-Host "✅ Tailscale updated."
 
-
-      - name: Login to Tailscale using OAuth
+      # 🔎 Verifikasi versi setelah update
+      - name: Check updated Tailscale version
         shell: pwsh
         run: |
+          & "C:\Program Files\Tailscale\tailscale.exe" version
+
+      # 🔐 Login menggunakan OAuth Client ID/Secret
+      - name: Connect to Tailscale via OAuth
+        shell: pwsh
+        run: |
+          Write-Host "🔑 Connecting to Tailscale using OAuth client..."
           & "C:\Program Files\Tailscale\tailscale.exe" up `
-            --login-server=https://login.tailscale.com `
-            --oauth-client-id=${{ secrets.TS_CLIENT_ID }} `
-            --oauth-client-secret=${{ secrets.TS_CLIENT_SECRET }} `
+            --oauth-client-id "${{ secrets.TS_CLIENT_ID }}" `
+            --oauth-client-secret "${{ secrets.TS_CLIENT_SECRET }}" `
             --accept-routes `
             --accept-dns=false `
-            --hostname=windows-runner
+            --hostname "windows-runner-${{ github.run_id }}"
+          
+          Write-Host "✅ Connected to Tailscale successfully."
 
       - name: Display Tailscale IP
         run: |
