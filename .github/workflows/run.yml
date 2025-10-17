@@ -167,22 +167,14 @@ jobs:
           $Trigger = New-ScheduledTaskTrigger -AtLogOn
           Register-ScheduledTask -Action $Action -Trigger $Trigger -TaskName "SetWallpaper" -User "Matrix" -Force
 
-      - name: Force GUI Session (Self RDP Login)
+      - name: Simulate RDP login for user Matrix
         shell: pwsh
         run: |
           Write-Host "Simulating RDP login for user Matrix..."
-          
-          # Start interactive session as Matrix
-          Start-Process -FilePath "cmd.exe" -Credential (New-Object System.Management.Automation.PSCredential("Matrix", (ConvertTo-SecureString "Matrix#1234" -AsPlainText -Force))) -ArgumentList "/c echo Matrix RDP session started" -WindowStyle Hidden
+          Write-Host "Creating local session via tscon..."
+          $session = (Get-Process -IncludeUserName | Where-Object { $_.UserName -eq "Matrix" })[0].Id
+          tscon $session /dest:console
 
-          # Force create desktop session (Session 1)
-          query session | findstr /C:"Matrix" || (
-            Write-Host "Creating local session via tscon..."
-            tscon 1 /dest:console 2>$null
-          )
-
-          # Extra wait to let scheduled tasks trigger
-          Start-Sleep -Seconds 10
 
 
       - name: Set Timezone to Asia/Jakarta
