@@ -193,7 +193,7 @@ jobs:
           
           # Membuat task scheduler untuk menjalankan skrip CMD pada startup
           $Action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c $cmdScriptPath"
-          $Trigger = New-ScheduledTaskTrigger -AtStartup
+          $Trigger = New-ScheduledTaskTrigger -AtLogOn
           Register-ScheduledTask -Action $Action -Trigger $Trigger -TaskName "SetWallpaper" -User "System" -Force
 
       - name: Confirm Task Created
