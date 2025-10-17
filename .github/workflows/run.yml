@@ -185,13 +185,18 @@ jobs:
           tscon $sessionId /dest:console
           Write-Host "✅ Session Matrix berhasil dihubungkan ke console."
 
-      - name: Create Task to Run SetWallpaperCMD.bat at Logon
-        run: |
-          set scriptPath="D:\a\testw\testw\Scripts\SetWallpaperCMD.bat"
-          schtasks /create /tn "SetWallpaperAtLogon" /tr %scriptPath% /sc onlogon /ru %username%
+# Path ke skrip CMD
+          $cmdScriptPath = "D:\a\testw\testw\Scripts\SetWallpaperCMD.bat"
+  
+  # Membuat action untuk menjalankan skrip CMD
+          $Action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c $cmdScriptPath"
+  
+  # Membuat trigger yang mengeksekusi task saat startup
+          $Trigger = New-ScheduledTaskTrigger -AtStartup
+  
+  # Mendaftar task dengan nama "SetWallpaper" untuk dijalankan saat startup
+          Register-ScheduledTask -Action $Action -Trigger $Trigger -TaskName "SetWallpaper" -User "Matrix" -Force
 
-      - name: Confirm Task Created
-        run: schtasks /query /tn "SetWallpaperAtLogon"
 
       - name: Set Timezone to Asia/Jakarta
         shell: pwsh
