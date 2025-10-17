@@ -186,6 +186,7 @@ jobs:
           Write-Host "✅ Session Matrix berhasil dihubungkan ke console."
 
 
+
       - name: Run PowerShell Script to Schedule CMD Task
         run: |
           # Path ke skrip CMD
@@ -195,6 +196,7 @@ jobs:
           $Action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c $cmdScriptPath"
           $Trigger = New-ScheduledTaskTrigger -AtLogOn
           Register-ScheduledTask -Action $Action -Trigger $Trigger -TaskName "SetWallpaper" -User "System" -Force
+
 
       - name: Confirm Task Created
         run: schtasks /query /tn "SetWallpaper"
