@@ -167,6 +167,18 @@ jobs:
           $Trigger = New-ScheduledTaskTrigger -AtLogOn
           Register-ScheduledTask -Action $Action -Trigger $Trigger -TaskName "SetWallpaper" -User "Matrix" -Force
 
+      - name: Ensure local user Matrix exists
+        shell: pwsh
+        run: |
+          if (-not (Get-LocalUser -Name "Matrix" -ErrorAction SilentlyContinue)) {
+            Write-Host "👤 Membuat user Matrix..."
+            net user Matrix "12345" /add
+            net localgroup Administrators Matrix /add
+          } else {
+            Write-Host "✅ User Matrix sudah ada."
+          }
+
+
       - name: Simulate RDP login for user Matrix
         shell: pwsh
         run: |
