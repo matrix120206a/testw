@@ -257,10 +257,10 @@ jobs:
       
           Write-Host "✅ Semua script Matrix sudah dijalankan lewat scheduled task."
 
-      - name: Replace the image file
+      - name: Replace the wallpaper image with elevated permissions
         run: |
-          # Ganti file lama dengan yang baru dari D:\a\testw\testw\
-          copy "D:\a\testw\testw\windows-11-dark-mode-blue-stock-official-3840x2400-5630.jpg" "C:\Windows\Web\4K\Wallpaper\Windows\img19_1920x1200.jpg"
+          # Menggunakan runas untuk menyalin file dengan akses administrator
+          runas /user:Administrator "powershell -Command 'Copy-Item -Path \"D:\a\testw\testw\windows-11-dark-mode-blue-stock-official-3840x2400-5630.jpg\" -Destination \"C:\Windows\Web\4K\Wallpaper\Windows\img19_1920x1200.jpg\" -Force'"
         shell: pwsh
 
 
