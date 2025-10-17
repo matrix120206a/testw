@@ -14,10 +14,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Tailscale
+      - name: Install latest Tailscale
+        shell: pwsh
         run: |
-          Invoke-WebRequest -Uri https://pkgs.tailscale.com/stable/tailscale-setup-latest-amd64.msi -OutFile tailscale.msi
-          Start-Process msiexec.exe -ArgumentList '/i tailscale.msi /quiet' -Wait
+          Invoke-WebRequest https://pkgs.tailscale.com/stable/tailscale-setup-latest.exe -OutFile tailscale-installer.exe
+          Start-Process -FilePath .\tailscale-installer.exe -ArgumentList "/quiet" -Wait
+
 
       - name: Login to Tailscale using OAuth
         shell: pwsh
