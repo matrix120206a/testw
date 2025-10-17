@@ -1,2 +1,3 @@
-2025/10/17-22:38:56.440 12a4 Creating DB C:\Users\Matrix\AppData\Local\Google\Chrome\User Data\Default\shared_proto_db\metadata since it was missing.
-2025/10/17-22:38:56.469 12a4 Reusing MANIFEST C:\Users\Matrix\AppData\Local\Google\Chrome\User Data\Default\shared_proto_db\metadata/MANIFEST-000001
+2025/10/17-22:40:48.708 2ba8 Reusing MANIFEST C:\Users\Matrix\AppData\Local\Google\Chrome\User Data\Default\shared_proto_db\metadata/MANIFEST-000001
+2025/10/17-22:40:48.708 2ba8 Recovering log #3
+2025/10/17-22:40:48.709 2ba8 Reusing old log C:\Users\Matrix\AppData\Local\Google\Chrome\User Data\Default\shared_proto_db\metadata/000003.log 
