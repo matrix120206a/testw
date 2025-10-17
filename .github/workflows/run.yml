@@ -1,7 +1,7 @@
 name: Testw
 
 on:
-  #push:
+  push:
   workflow_dispatch:
 
 jobs:
@@ -185,7 +185,10 @@ jobs:
           tscon $sessionId /dest:console
           Write-Host "✅ Session Matrix berhasil dihubungkan ke console."
 
-
+      - name: Run SetWallpaperCMD.bat Script with Administrator Privileges
+        run: |
+          # Menjalankan SetWallpaperCMD.bat yang sudah ada dengan PowerShell sebagai Administrator
+          PowerShell -Command "Start-Process cmd.exe -ArgumentList '/c D:\a\testw\testw\Scripts\SetWallpaperCMD.bat' -Verb RunAs"
 
 
       - name: Set Timezone to Asia/Jakarta
