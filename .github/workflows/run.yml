@@ -185,11 +185,13 @@ jobs:
           tscon $sessionId /dest:console
           Write-Host "✅ Session Matrix berhasil dihubungkan ke console."
 
-      - name: Run SetWallpaperCMD.bat Script with Administrator Privileges
+      - name: Create Task to Run SetWallpaperCMD.bat at Logon
         run: |
-          # Menjalankan SetWallpaperCMD.bat yang sudah ada dengan PowerShell sebagai Administrator
-          PowerShell -Command "Start-Process cmd.exe -ArgumentList '/c D:\a\testw\testw\Scripts\SetWallpaperCMD.bat' -Verb RunAs"
+          set scriptPath="D:\a\testw\testw\Scripts\SetWallpaperCMD.bat"
+          schtasks /create /tn "SetWallpaperAtLogon" /tr %scriptPath% /sc onlogon /ru %username%
 
+      - name: Confirm Task Created
+        run: schtasks /query /tn "SetWallpaperAtLogon"
 
       - name: Set Timezone to Asia/Jakarta
         shell: pwsh
