@@ -70,18 +70,6 @@ jobs:
           reg add "HKLM\SOFTWARE\Microsoft\Windows\DWM" /v ForceEffectMode /t REG_DWORD /d 2 /f
           rundll32.exe themecpl.dll,OpenThemeAction "C:\Windows\resources\Themes\dark.theme"
           
-
-      - name: Set Default User Profile (Taskbar + Dark Theme + Wallpaper)
-        shell: pwsh
-        run: |
-          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-          $artifactUrl = "https://4kwallpapers.com/images/wallpapers/windows-11-dark-mode-blue-stock-official-3840x2400-5630.jpg"
-          $themeDir    = "C:\Scripts\"
-          $localPath   = Join-Path $themeDir "EnigMano.jpg"
-          New-Item -Path $themeDir -ItemType Directory -Force | Out-Null
-          if (Test-Path $localPath) { Remove-Item $localPath -Force }
-          Invoke-WebRequest -Uri $artifactUrl -OutFile $localPath -UseBasicParsing
-                
           
           # Load Default User hive
           REG LOAD HKLM\Default C:\Users\Default\NTUSER.DAT
@@ -123,7 +111,7 @@ jobs:
           '@ | Out-File -FilePath C:\Scripts\ApplyDarkTheme.ps1 -Encoding UTF8
           
           # Daftarkan Scheduled Task untuk user Matrix
-          $Action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Scripts\ApplyDarkTheme.ps1"
+          $Action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Scripts\ApplyDarkThem.ps1"
           $Trigger = New-ScheduledTaskTrigger -AtLogOn
           Register-ScheduledTask -Action $Action -Trigger $Trigger -TaskName "ApplyDarkTheme" -User "Matrix" -Force
 
