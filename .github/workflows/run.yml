@@ -203,48 +203,26 @@ jobs:
           tscon $sessionId /dest:console
           Write-Host "✅ Session Matrix berhasil dihubungkan ke console."
 
-      - name: Run PowerShell scripts as Matrix user
-        shell: pwsh
-        run: |
-          $pw = "Matrix#1234"
-      
-          function Run-TaskAsMatrix($taskName, $actionCmd) {
-            schtasks /Delete /TN $taskName /F > $null 2>&1
-            $start = (Get-Date).AddMinutes(1).ToString("HH:mm")
-            Write-Host "⏳ Creating scheduled task '$taskName' for Matrix..."
-            cmd /c "schtasks /Create /TN `"$taskName`" /TR `"$actionCmd`" /SC ONCE /ST $start /RL HIGHEST /F /RU Matrix /RP `"$pw`""
-            Start-Sleep -Seconds 2
-            Write-Host "▶️ Starting scheduled task '$taskName'..."
-            cmd /c "schtasks /Run /TN `"$taskName`""
-      
-            # Tunggu hingga selesai
-            for ($i=0; $i -lt 60; $i++) {
-              Start-Sleep -Seconds 2
-              $info = schtasks /Query /TN $taskName /V /FO LIST 2>$null | Out-String
-              if ($info -match "Status:\s+Ready" -or $info -match "Status:\s+Unknown" -or $info -match "Status:\s+Could not") {
-                break
-              }
-            }
-      
-            Write-Host "🧹 Deleting scheduled task '$taskName'..."
-            schtasks /Delete /TN $taskName /F > $null 2>&1
-          }
-      
-          # Contoh script yang mau dijalankan oleh user Matrix
-          $script1 = 'powershell.exe -ExecutionPolicy Bypass -File "C:\Scripts\ApplyDarkTheme.ps1"'
-          $script2 = 'powershell.exe -ExecutionPolicy Bypass -File "C:\Scripts\SetWallpaper.ps1"'
-      
-          Run-TaskAsMatrix -taskName "Matrix_ApplyDarkTheme" -actionCmd $script1
-          Run-TaskAsMatrix -taskName "Matrix_SetWallpaper" -actionCmd $script2
-      
-          Write-Host "✅ Semua script Matrix sudah dijalankan lewat scheduled task."
-
 
 
       - name: Set Timezone to Asia/Jakarta
         shell: pwsh
         run: |
           tzutil /s "SE Asia Standard Time"
+
+      - name: Set default wallpaper for all users
+        shell: pwsh
+        run: |
+          $wallpaper = "D:\a\testw\testw\windows-11-dark-mode-blue-stock-official-3840x2400-5630.jpg"
+          Write-Host "🖼️ Setting default wallpaper for all users to $wallpaper ..."
+
+          # Set wallpaper for .DEFAULT user hive (digunakan oleh semua user baru)
+          & reg add "HKU\.DEFAULT\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d "$wallpaper" /f
+
+          # Apply the wallpaper setting
+          RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters
+
+          Write-Host "✅ Default wallpaper applied successfully."
 
       - name: Keep session alive
         run: |
