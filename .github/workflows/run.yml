@@ -170,11 +170,10 @@ jobs:
       - name: Simulate RDP login for user Matrix
         shell: pwsh
         run: |
-          Write-Host "Simulating RDP login for user Matrix..."
+          Write-Host "👤 Simulating RDP login for user Matrix..."
           Write-Host "Creating local session via tscon..."
-          $session = (Get-Process -IncludeUserName | Where-Object { $_.UserName -eq "Matrix" })[0].Id
+          $session = (Get-Process -IncludeUserName | Where-Object { $_.UserName -like "*Matrix*" })[0].Id
           tscon $session /dest:console
-
 
 
       - name: Set Timezone to Asia/Jakarta
