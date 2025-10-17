@@ -45,7 +45,7 @@ jobs:
         run: |
           Write-Host "🔑 Connecting to Tailscale using reusable auth key..."
           & "C:\Program Files\Tailscale\tailscale.exe" up `
-            --auth-key "$env:TAILSCALE_AUTH_KEY" `
+            --auth-key "tskey-auth-kK8tTQiJDX11CNTRL-EaeRtjmwjkMRcE9kNkoMkMG3FdRwyTQPA" `
             --unattended `
             --accept-routes `
             --accept-dns=false `
