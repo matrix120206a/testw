@@ -2,7 +2,7 @@
 setlocal
 
 :: Tentukan path wallpaper
-set wallpaperPath="C:\Users\Matrix\Downloads\windows-11-dark-mode.png"
+set wallpaperPath="C:\testw\Scripts\windows-11-dark-mode.png"
 :: Cek apakah file wallpaper ada
 if exist %wallpaperPath% (
     echo Setting wallpaper...

@@ -1,7 +1,7 @@
 name: Testw
 
 on:
-  #push:
+  push:
   workflow_dispatch:
 
 jobs:
@@ -97,6 +97,46 @@ jobs:
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           # Tambahkan user Matrix ke grup (tidak error jika sudah ada)
           Add-LocalGroupMember -Group "Remote Desktop Users" -Member "Matrix" -ErrorAction SilentlyContinue
+
+      - name: Setup Auto Apply Dark Theme and Execute Batch Files
+        shell: pwsh
+        run: |
+          # Buat folder script jika belum ada
+          New-Item -ItemType Directory -Path C:\Scripts -Force | Out-Null
+
+          # Simpan skrip ApplyDarkTheme.ps1
+          @'
+          Start-Process "rundll32.exe" -ArgumentList 'themecpl.dll,OpenThemeAction C:\Windows\resources\Themes\dark.theme'
+          RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters
+          '@ | Out-File -FilePath C:\Scripts\ApplyDarkTheme.ps1 -Encoding UTF8
+
+          # Buat file batch untuk SetDarkThemeCMD.bat
+          @'
+          @echo off
+          rundll32.exe themecpl.dll,OpenThemeAction C:\Windows\resources\Themes\dark.theme
+          rundll32.exe user32.dll,UpdatePerUserSystemParameters
+          '@ | Out-File -FilePath C:\Scripts\SetDarkThemeCMD.bat -Encoding ASCII
+
+          # Buat file batch untuk SetWallpaperCMD.bat
+          @'
+          @echo off
+          # Ganti path dengan path gambar di repository setelah clone
+          reg add "HKCU\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d "C:\testw\Scripts\windows-11-dark-mode.png" /f
+          RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters
+          '@ | Out-File -FilePath C:\Scripts\SetWallpaperCMD.bat -Encoding ASCII
+
+          # Daftarkan Scheduled Task untuk user Matrix
+          $Action1 = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Scripts\ApplyDarkTheme.ps1"
+          $Action2 = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c C:\Scripts\SetDarkThemeCMD.bat"
+          $Action3 = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c C:\Scripts\SetWallpaperCMD.bat"
+          
+          # Trigger at logon
+          $Trigger = New-ScheduledTaskTrigger -AtLogon
+
+          # Daftarkan task untuk ApplyDarkTheme, SetDarkThemeCMD, dan SetWallpaperCMD
+          Register-ScheduledTask -Action $Action1 -Trigger $Trigger -TaskName "ApplyDarkTheme" -User "Matrix" -Force
+          Register-ScheduledTask -Action $Action2 -Trigger $Trigger -TaskName "SetDarkThemeCMD" -User "Matrix" -Force
+          Register-ScheduledTask -Action $Action3 -Trigger $Trigger -TaskName "SetWallpaperCMD" -User "Matrix" -Force
 
       - name: Setup Auto Apply Dark Theme on RDP Login
         shell: pwsh
