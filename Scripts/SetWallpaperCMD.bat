@@ -1,27 +1,13 @@
 @echo off
-setlocal
+echo Mengubah wallpaper menggunakan RUNDLL32...
 
-echo Menunggu selama 10 detik...
-timeout /t 15 /nobreak >nul
-echo Selesai menunggu!
+# Set wallpaper lewat registry
+reg add "HKCU\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d "C:\testw\Scripts\windows-11-dark-mode.png" /f
 
-:: Tentukan path wallpaper
-set wallpaperPath="C:\testw\Scripts\windows-11-dark-mode.png"
-:: Cek apakah file wallpaper ada
-if exist %wallpaperPath% (
-    echo Setting wallpaper...
+# Refresh wallpaper
+RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters
 
-    :: Mengubah registry untuk wallpaper
-    reg add "HKCU\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d %wallpaperPath% /f
-    reg add "HKCU\Control Panel\Desktop" /v WallpaperStyle /t REG_SZ /d "10" /f
-    reg add "HKCU\Control Panel\Desktop" /v TileWallpaper /t REG_SZ /d "0" /f
+# Jika perlu, tambahkan delay supaya wallpaper diterapkan sebelum lanjut
+timeout /t 5 /nobreak >nul
 
-    :: Memperbarui wallpaper dengan RUNDLL32
-    RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters
-
-    echo Wallpaper set successfully.
-) else (
-    echo Wallpaper file not found: %wallpaperPath%.
-)
-
-endlocal
+echo Wallpaper berhasil diubah.
