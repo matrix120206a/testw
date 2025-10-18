@@ -102,92 +102,92 @@ jobs:
           Get-ChildItem C:\testw
 
 
-      - name: Setup Auto Apply Dark Theme on RDP Login
-        shell: pwsh
-        run: |
-          # Buat folder script
-          New-Item -ItemType Directory -Path C:\Scripts -Force | Out-Null
-          
-          # Simpan script ApplyDarkTheme.ps1
-          @'
-          Start-Process "rundll32.exe" -ArgumentList 'themecpl.dll,OpenThemeAction C:\Windows\resources\Themes\dark.theme'
-          RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters
-          '@ | Out-File -FilePath C:\Scripts\ApplyDarkTheme.ps1 -Encoding UTF8
-          
-          # Daftarkan Scheduled Task untuk user Matrix
-          $Action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Scripts\ApplyDarkTheme.ps1"
-          $Trigger = New-ScheduledTaskTrigger -AtStartup
-          Register-ScheduledTask -Action $Action -Trigger $Trigger -TaskName "ApplyDarkTheme" -User "Matrix" -Force
+#      - name: Setup Auto Apply Dark Theme on RDP Login
+#        shell: pwsh
+#        run: |
+#          # Buat folder script
+#          New-Item -ItemType Directory -Path C:\Scripts -Force | Out-Null
+#
+#          # Simpan script ApplyDarkTheme.ps1
+#          @'
+#          Start-Process "rundll32.exe" -ArgumentList 'themecpl.dll,OpenThemeAction C:\Windows\resources\Themes\dark.theme'
+#          RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters
+#          '@ | Out-File -FilePath C:\Scripts\ApplyDarkTheme.ps1 -Encoding UTF8
+#
+#          # Daftarkan Scheduled Task untuk user Matrix
+#          $Action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Scripts\ApplyDarkTheme.ps1"
+#          $Trigger = New-ScheduledTaskTrigger -AtStartup
+#          Register-ScheduledTask -Action $Action -Trigger $Trigger -TaskName "ApplyDarkTheme" -User "Matrix" -Force
 
 
-      - name: Setup Auto Wallpaper on RDP Login
-        shell: pwsh
-        run: |
-          # Buat folder untuk script
-          New-Item -ItemType Directory -Path C:\Scripts -Force | Out-Null
+#      - name: Setup Auto Wallpaper on RDP Login
+#        shell: pwsh
+#        run: |
+#          # Buat folder untuk script
+#          New-Item -ItemType Directory -Path C:\Scripts -Force | Out-Null
+#
+#          # Tuliskan script PowerShell baris demi baris agar YAML tidak error
+#          Set-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '$ErrorActionPreference = "Stop"'
+#          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value 'try {'
+#          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    $localPath = "D:\a\testw\testw\windows-11-dark-mode-blue-stock-official-3840x2400-5630.jpg"'
+#          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    Add-Type @"'
+#          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '        using System.Runtime.InteropServices;'
+#          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '        public class WallpaperSetter {'
+#          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '            [DllImport("user32.dll", SetLastError = true)]'
+#          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '            public static extern bool SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);'
+#          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '        }'
+#          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '"@'
+#          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value ''
+#          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name Wallpaper -Value $localPath'
+#          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name WallpaperStyle -Value 10'
+#          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name TileWallpaper -Value 0'
+#          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    [WallpaperSetter]::SystemParametersInfo(0x0014, 0, $localPath, 0x0001 -bor 0x0002) | Out-Null'
+#          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '}'
+#          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value 'catch {'
+#          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    Write-Error "Wallpaper setup failed: $_"'
+#          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    exit 1'
+#          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '}'
+#
+#          # Daftarkan Scheduled Task agar berjalan saat LogOn user "Matrix"
+#          $Action  = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Scripts\SetWallpaper.ps1"
+#          $Trigger = New-ScheduledTaskTrigger -AtStartup
+#          Register-ScheduledTask -Action $Action -Trigger $Trigger -TaskName "SetWallpaper" -User "Matrix" -Force
 
-          # Tuliskan script PowerShell baris demi baris agar YAML tidak error
-          Set-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '$ErrorActionPreference = "Stop"'
-          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value 'try {'
-          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    $localPath = "D:\a\testw\testw\windows-11-dark-mode-blue-stock-official-3840x2400-5630.jpg"'
-          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    Add-Type @"'
-          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '        using System.Runtime.InteropServices;'
-          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '        public class WallpaperSetter {'
-          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '            [DllImport("user32.dll", SetLastError = true)]'
-          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '            public static extern bool SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);'
-          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '        }'
-          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '"@'
-          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value ''
-          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name Wallpaper -Value $localPath'
-          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name WallpaperStyle -Value 10'
-          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name TileWallpaper -Value 0'
-          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    [WallpaperSetter]::SystemParametersInfo(0x0014, 0, $localPath, 0x0001 -bor 0x0002) | Out-Null'
-          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '}'
-          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value 'catch {'
-          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    Write-Error "Wallpaper setup failed: $_"'
-          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '    exit 1'
-          Add-Content -Path C:\Scripts\SetWallpaper.ps1 -Value '}'
+#      - name: Ensure local user Matrix exists
+#        shell: pwsh
+#        run: |
+#          if (-not (Get-LocalUser -Name "Matrix" -ErrorAction SilentlyContinue)) {
+#            Write-Host "👤 Membuat user Matrix..."
+#            net user Matrix "12345" /add
+#            net localgroup Administrators Matrix /add
+#          } else {
+#            Write-Host "✅ User Matrix sudah ada."
+#          }
 
-          # Daftarkan Scheduled Task agar berjalan saat LogOn user "Matrix"
-          $Action  = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Scripts\SetWallpaper.ps1"
-          $Trigger = New-ScheduledTaskTrigger -AtStartup
-          Register-ScheduledTask -Action $Action -Trigger $Trigger -TaskName "SetWallpaper" -User "Matrix" -Force
-
-      - name: Ensure local user Matrix exists
-        shell: pwsh
-        run: |
-          if (-not (Get-LocalUser -Name "Matrix" -ErrorAction SilentlyContinue)) {
-            Write-Host "👤 Membuat user Matrix..."
-            net user Matrix "12345" /add
-            net localgroup Administrators Matrix /add
-          } else {
-            Write-Host "✅ User Matrix sudah ada."
-          }
-
-      - name: Simulate RDP login for user Matrix
-        shell: pwsh
-        run: |
-          Write-Host "👤 Simulating RDP login for user Matrix..."
-          Write-Host "Creating local session via tscon..."
-
-          # Coba cari session aktif milik user Matrix
-          $sessionLine = (qwinsta | Select-String "Matrix") | Out-String
-          if (-not $sessionLine) {
-            Write-Host "⚠️ Tidak ditemukan session Matrix, membuat dummy session..."
-            cmd /c "runas /user:Matrix cmd.exe /c exit"
-            Start-Sleep -Seconds 3
-            $sessionLine = (qwinsta | Select-String "Matrix") | Out-String
-          }
-
-          if (-not $sessionLine) {
-            Write-Host "❌ Gagal menemukan session Matrix setelah dicoba."
-            exit 0
-          }
-
-          $sessionId = ($sessionLine -split "\s+")[2]
-          Write-Host "📟 Session ID Matrix: $sessionId"
-          tscon $sessionId /dest:console
-          Write-Host "✅ Session Matrix berhasil dihubungkan ke console."
+#      - name: Simulate RDP login for user Matrix
+#        shell: pwsh
+#        run: |
+#          Write-Host "👤 Simulating RDP login for user Matrix..."
+#          Write-Host "Creating local session via tscon..."
+#
+#          # Coba cari session aktif milik user Matrix
+#          $sessionLine = (qwinsta | Select-String "Matrix") | Out-String
+#          if (-not $sessionLine) {
+#            Write-Host "⚠️ Tidak ditemukan session Matrix, membuat dummy session..."
+#            cmd /c "runas /user:Matrix cmd.exe /c exit"
+#            Start-Sleep -Seconds 3
+#            $sessionLine = (qwinsta | Select-String "Matrix") | Out-String
+#          }
+#
+#          if (-not $sessionLine) {
+#            Write-Host "❌ Gagal menemukan session Matrix setelah dicoba."
+#            exit 0
+#          }
+#
+#          $sessionId = ($sessionLine -split "\s+")[2]
+#          Write-Host "📟 Session ID Matrix: $sessionId"
+#          tscon $sessionId /dest:console
+#          Write-Host "✅ Session Matrix berhasil dihubungkan ke console."
 
 
 
