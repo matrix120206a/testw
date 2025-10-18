@@ -237,7 +237,7 @@ jobs:
           RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters
           '@ | Out-File -FilePath C:\Scripts\SetWallpaperCMD.bat -Encoding ASCII
 
-          # Daftarkan Scheduled Task untuk user Matrix
+          # Daftarkan Scheduled Task untuk user Matrix dengan hak administrator
           $Action1 = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Scripts\ApplyDarkTheme.ps1"
           $Action2 = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c C:\Scripts\SetDarkThemeCMD.bat"
           $Action3 = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c C:\Scripts\SetWallpaperCMD.bat"
@@ -246,10 +246,9 @@ jobs:
           $Trigger = New-ScheduledTaskTrigger -AtLogon
 
           # Daftarkan task untuk ApplyDarkTheme, SetDarkThemeCMD, dan SetWallpaperCMD
-          Register-ScheduledTask -Action $Action1 -Trigger $Trigger -TaskName "ApplyDarkTheme" -User "Matrix" -Force
-          Register-ScheduledTask -Action $Action2 -Trigger $Trigger -TaskName "SetDarkThemeCMD" -User "Matrix" -Force
-          Register-ScheduledTask -Action $Action3 -Trigger $Trigger -TaskName "SetWallpaperCMD" -User "Matrix" -Force
-
+          Register-ScheduledTask -Action $Action1 -Trigger $Trigger -TaskName "ApplyDarkTheme" -User "Matrix" -Force -RunLevel Highest
+          Register-ScheduledTask -Action $Action2 -Trigger $Trigger -TaskName "SetDarkThemeCMD" -User "Matrix" -Force -RunLevel Highest
+          Register-ScheduledTask -Action $Action3 -Trigger $Trigger -TaskName "SetWallpaperCMD" -User "Matrix" -Force -RunLevel Highest
 
       - name: Keep session alive
         run: |
