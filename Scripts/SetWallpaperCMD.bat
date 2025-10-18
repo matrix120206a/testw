@@ -1,6 +1,10 @@
 @echo off
 setlocal
 
+echo Menunggu selama 10 detik...
+timeout /t 15 /nobreak >nul
+echo Selesai menunggu!
+
 :: Tentukan path wallpaper
 set wallpaperPath="C:\testw\Scripts\windows-11-dark-mode.png"
 :: Cek apakah file wallpaper ada
