@@ -8,6 +8,6 @@ rem Refresh wallpaper
 RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters
 
 rem Jika perlu, tambahkan delay supaya wallpaper diterapkan sebelum lanjut
-timeout /t 5 /nobreak >nul
+timeout /t 0 /nobreak >nul
 
 echo Wallpaper berhasil diubah.
