@@ -19,9 +19,11 @@ jobs:
         shell: pwsh
         env:
           NGETES_ASU: ${{ secrets.KONTOL }}
+          PAT: ${{ secret.PAT }}
         run: |
-          $NGETEASU = "${{ secrets.KONTOL }}"
-          Write-Host "Length: $($NGETEASU.Length)"
+          $PATOk = "${{ secrets.PAT }}"
+          
+          Write-Host "Length: $($PAT.Length)"
           Write-Host "⬇️ Downloading latest Tailscale..."
           Invoke-WebRequest https://pkgs.tailscale.com/stable/tailscale-setup-latest.exe -OutFile tailscale-installer.exe
           Write-Host "🚀 Installing Tailscale..."
