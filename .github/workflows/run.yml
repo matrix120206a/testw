@@ -91,11 +91,8 @@ jobs:
           # Menjalankan perintah untuk clone repository
           cd D:\
           git clone https://github.com/matrix120206a/testw.git
-          git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/TheMatrix14C/ZalithLauncher2-custom-build.git
-          git clone https://github.com/TheMatrix14C/ZalithLauncher2-custom-build.git
-          # Opsional: Tampilkan hasil clone
-          Get-ChildItem D:\testw
-  
+          git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/TheMatrix14C/ZalithLauncher2-custom-build.git          Get-ChildItem D:\testw
+          Get-ChildItem D:\ZalithLauncher2-custom-build
 
 #      - name: Setup Auto Apply Dark Theme on RDP Login
 #        shell: pwsh
