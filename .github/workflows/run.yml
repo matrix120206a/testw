@@ -37,7 +37,9 @@ jobs:
       - name: Display Tailscale IP
         run: |
           & "C:\Program Files\Tailscale\tailscale.exe" ip -4
-          
+
+      - name: Disable Password
+        run: |
           secedit /export /cfg $env:TEMP\secpol.cfg
           (Get-Content $env:TEMP\secpol.cfg).Replace("PasswordComplexity = 1", "PasswordComplexity = 0") | Set-Content $env:TEMP\secpol.cfg
           secedit /configure /db $env:TEMP\secedit.sdb /cfg $env:TEMP\secpol.cfg /areas SECURITYPOLICY
@@ -92,7 +94,7 @@ jobs:
           git clone https://github.com/TheMatrix14C/ZalithLauncher2-custom-build.git
           # Opsional: Tampilkan hasil clone
           Get-ChildItem D:\testw
-          Get-ChildItem D:\ZalithLauncher2-custom-build
+  
 
 #      - name: Setup Auto Apply Dark Theme on RDP Login
 #        shell: pwsh
