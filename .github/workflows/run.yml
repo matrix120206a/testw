@@ -74,6 +74,7 @@ jobs:
       - name: Enable RDP
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
         run: |
           # Aktifkan RDP
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
