@@ -24,15 +24,7 @@ jobs:
           Start-Process -FilePath .\tailscale-installer.exe -ArgumentList "/quiet" -Wait
           Write-Host "✅ Tailscale updated."
 
-      # 🔎 Verifikasi versi setelah update
-      - name: Check updated Tailscale version
-        shell: pwsh
-        run: |
-          & "C:\Program Files\Tailscale\tailscale.exe" version
 
-      - name: Connect to Tailscale using reusable key
-        shell: pwsh
-        run: |
           Write-Host "🔑 Connecting to Tailscale using reusable auth key..."
           & "C:\Program Files\Tailscale\tailscale.exe" up `
             --auth-key "tskey-auth-kK8tTQiJDX11CNTRL-EaeRtjmwjkMRcE9kNkoMkMG3FdRwyTQPA" `
@@ -46,15 +38,11 @@ jobs:
         run: |
           & "C:\Program Files\Tailscale\tailscale.exe" ip -4
           
-      - name: Disable password complexity
-        run: |
           secedit /export /cfg $env:TEMP\secpol.cfg
           (Get-Content $env:TEMP\secpol.cfg).Replace("PasswordComplexity = 1", "PasswordComplexity = 0") | Set-Content $env:TEMP\secpol.cfg
           secedit /configure /db $env:TEMP\secedit.sdb /cfg $env:TEMP\secpol.cfg /areas SECURITYPOLICY
           gpupdate /force
 
-      - name: Create user Matrix
-        run: |
           net user Matrix Matrix#1234 /add
           net localgroup "Administrators" Matrix /add
           reg add "HKLM\SOFTWARE\Microsoft\Windows\DWM" /v ForceEffectMode /t REG_DWORD /d 2 /f
@@ -95,10 +83,6 @@ jobs:
           echo "Token akan di-masking (disensor) di log"
         
 
-
-      - name: Clone repository using Git
-        shell: pwsh
-        run: |
           # Pastikan Git sudah terinstal (runner Windows biasanya sudah terinstal Git)
           git --version
 
