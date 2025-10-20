@@ -81,9 +81,7 @@ jobs:
           Add-LocalGroupMember -Group "Remote Desktop Users" -Member "Matrix" -ErrorAction SilentlyContinue
 
 
-          # Di Windows, Anda dapat mengakses Env Var menggunakan $env:
-          echo "Token akan di-masking (disensor) di log"
-        
+          # Di Windows, Anda dapat mengakses Env Var menggunakan $env:        
 
           # Pastikan Git sudah terinstal (runner Windows biasanya sudah terinstal Git)
           git --version
@@ -91,8 +89,9 @@ jobs:
           # Menjalankan perintah untuk clone repository
           cd D:\
           git clone https://github.com/matrix120206a/testw.git
-          git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/TheMatrix14C/ZalithLauncher2-custom-build.git          Get-ChildItem D:\testw
-          Get-ChildItem D:\ZalithLauncher2-custom-build
+          git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/TheMatrix14C/ZalithLauncher2-custom-build.git
+#          Get-ChildItem D:\testw
+#          Get-ChildItem D:\ZalithLauncher2-custom-build
 
 #      - name: Setup Auto Apply Dark Theme on RDP Login
 #        shell: pwsh
