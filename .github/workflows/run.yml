@@ -219,7 +219,10 @@ jobs:
           @'
           Start-Process "rundll32.exe" -ArgumentList 'themecpl.dll,OpenThemeAction C:\Windows\resources\Themes\dark.theme'
           RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters
+          Copy-Item -Path "D:\testw\Scripts\windows-11-dark-mode.png" -Destination "C:\Users\Matrix\Desktop\"
+
           '@ | Out-File -FilePath C:\Scripts\ApplyDarkTheme.ps1 -Encoding UTF8
+          
 
           # Buat file batch untuk SetDarkThemeCMD.bat
           @'
@@ -242,7 +245,7 @@ jobs:
           $Action3 = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c C:\Scripts\SetWallpaperCMD.bat"
           
           # Trigger at logon
-          $Trigger = New-ScheduledTaskTrigger -AtLogon
+          $Trigger = New-ScheduledTaskTrigger -AtLogOn
 
           # Daftarkan task untuk ApplyDarkTheme, SetDarkThemeCMD, dan SetWallpaperCMD
           Register-ScheduledTask -Action $Action1 -Trigger $Trigger -TaskName "ApplyDarkTheme" -User "Matrix" -Force -RunLevel Highest
