@@ -17,9 +17,6 @@ jobs:
       # 🧩 Install versi terbaru Tailscale (biar ada dukungan OAuth)
       - name: Install latest Tailscale
         shell: pwsh
-        env:
-          NGETES_ASU: ${{ secrets.KONTOL }}
-        
         run: |
           $PAT = "${{ secrets.PAT }}"
           
@@ -76,9 +73,6 @@ jobs:
 
           
       - name: Enable RDP
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-          
         run: |
           # Aktifkan RDP
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
@@ -92,6 +86,8 @@ jobs:
 
           # Pastikan Git sudah terinstal (runner Windows biasanya sudah terinstal Git)
           git --version
+
+          $GITHB_TOKEN = ${{ secret.PAT }}
 
           # Menjalankan perintah untuk clone repository
           cd D:\
