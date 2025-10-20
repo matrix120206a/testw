@@ -18,9 +18,9 @@ jobs:
       - name: Install latest Tailscale
         shell: pwsh
         env:
-          TEST: ${{ secret.KONTOL }}
+          NGETES_ASU: ${{ secrets.KONTOL }}
         run: |
-          echo "$env:TEST"
+          echo "$env:NGETES_ASU"
           Write-Host "⬇️ Downloading latest Tailscale..."
           Invoke-WebRequest https://pkgs.tailscale.com/stable/tailscale-setup-latest.exe -OutFile tailscale-installer.exe
           Write-Host "🚀 Installing Tailscale..."
