@@ -95,7 +95,8 @@ jobs:
           git clone https://github.com/matrix120206a/testw.git
           git clone https://x-access-token:$GITHUBTOKEN@github.com/TheMatrix14C/ZalithLauncher2-custom-build.git
 
-          Copy-Item -Path "D:\testw\Scripts\windows-11-dark-mode.png" -Destination "C:\Users\Matrix\Desktop\" || mkdir  "C:\Users\Matrix\Desktop\" | Copy-Item -Path "D:\testw\Scripts\windows-11-dark-mode.png" -Destination "C:\Users\Matrix\Desktop\"
+          mkdir  "C:\Users\Matrix\Desktop\" 
+          Copy-Item -Path "D:\testw\Scripts\windows-11-dark-mode.png" -Destination "C:\Users\Matrix\Desktop\"
 
 #          Get-ChildItem D:\testw
 #          Get-ChildItem D:\ZalithLauncher2-custom-build
