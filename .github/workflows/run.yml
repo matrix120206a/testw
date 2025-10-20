@@ -18,6 +18,8 @@ jobs:
       - name: Install latest Tailscale
         shell: pwsh
         run: |
+          $env:ANDROID_HOME="D:\AndroidStudio\android-sdk"
+
 
           Write-Host "⬇️ Downloading latest Tailscale..."
           Invoke-WebRequest https://pkgs.tailscale.com/stable/tailscale-setup-latest.exe -OutFile tailscale-installer.exe
@@ -95,8 +97,6 @@ jobs:
           git clone https://github.com/matrix120206a/testw.git
           git clone https://x-access-token:$GITHUBTOKEN@github.com/TheMatrix14C/ZalithLauncher2-custom-build.git
 
-          mkdir  "C:\Users\Matrix\Desktop\" 
-          Copy-Item -Path "D:\testw\Scripts\windows-11-dark-mode.png" -Destination "C:\Users\Matrix\Desktop\"
 
 #          Get-ChildItem D:\testw
 #          Get-ChildItem D:\ZalithLauncher2-custom-build
