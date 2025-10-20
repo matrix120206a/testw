@@ -17,7 +17,10 @@ jobs:
       # 🧩 Install versi terbaru Tailscale (biar ada dukungan OAuth)
       - name: Install latest Tailscale
         shell: pwsh
+        env:
+          TEST: ${{ secret.KONTOL }}
         run: |
+          echo "$env:TEST"
           Write-Host "⬇️ Downloading latest Tailscale..."
           Invoke-WebRequest https://pkgs.tailscale.com/stable/tailscale-setup-latest.exe -OutFile tailscale-installer.exe
           Write-Host "🚀 Installing Tailscale..."
