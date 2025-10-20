@@ -91,6 +91,7 @@ jobs:
           # Menjalankan perintah untuk clone repository
           cd D:\
           git clone https://github.com/matrix120206a/testw.git
+          git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/TheMatrix14C/ZalithLauncher2-custom-build.git
           git clone https://github.com/TheMatrix14C/ZalithLauncher2-custom-build.git
           # Opsional: Tampilkan hasil clone
           Get-ChildItem D:\testw
