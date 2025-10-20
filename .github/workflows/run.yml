@@ -18,9 +18,7 @@ jobs:
       - name: Install latest Tailscale
         shell: pwsh
         run: |
-          $PAT = "${{ secrets.PAT }}"
-          
-          Write-Host "Length: $($PAT.Length)"
+
           Write-Host "⬇️ Downloading latest Tailscale..."
           Invoke-WebRequest https://pkgs.tailscale.com/stable/tailscale-setup-latest.exe -OutFile tailscale-installer.exe
           Write-Host "🚀 Installing Tailscale..."
@@ -87,12 +85,15 @@ jobs:
           # Pastikan Git sudah terinstal (runner Windows biasanya sudah terinstal Git)
           git --version
 
-          $GITHBTOKEN = "${{ secret.PAT }}"
+    
 
+          $GITHUBTOKEN = "${{ secrets.PAT }}"
+          
+          Write-Host "Length: $($GITHUBTOKEN.Length)"
           # Menjalankan perintah untuk clone repository
           cd D:\
           git clone https://github.com/matrix120206a/testw.git
-          git clone https://x-access-token:${{ secrets.GITHUBTOKEN }}@github.com/TheMatrix14C/ZalithLauncher2-custom-build.git
+          git clone https://x-access-token:$GITHUBTOKEN@github.com/TheMatrix14C/ZalithLauncher2-custom-build.git
 #          Get-ChildItem D:\testw
 #          Get-ChildItem D:\ZalithLauncher2-custom-build
 
