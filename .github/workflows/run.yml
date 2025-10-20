@@ -41,6 +41,21 @@ jobs:
         run: |
           & "C:\Program Files\Tailscale\tailscale.exe" ip -4
 
+      - name: Download Google Drive File with curl
+        # Menggunakan shell default (PowerShell) yang mendukung perintah bash/curl
+        run: |
+          $FILE_ID="1l3wtlTzkw9IrrvnVBXU0oulsMbStgeB4"
+          $FILE_NAME="AndroidStudio-app.tar" # Ganti dengan nama file yang diinginkan
+
+          # Perintah curl (sama seperti di Linux)
+          # -L untuk mengikuti redirect
+          # -o untuk menentukan nama file output
+          curl -L "https://drive.google.com/uc?export=download&id=$FILE_ID" -o $FILE_NAME
+
+          # Verifikasi unduhan (opsional - menggunakan perintah Windows)
+          Write-Host "File berhasil diunduh:"
+          Get-Item $FILE_NAME | Select-Object Name, Length
+
       - name: Disable Password
         run: |
           secedit /export /cfg $env:TEMP\secpol.cfg
