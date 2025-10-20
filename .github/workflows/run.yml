@@ -19,9 +19,9 @@ jobs:
         shell: pwsh
         env:
           NGETES_ASU: ${{ secrets.KONTOL }}
-          PAT: ${{ secret.PAT }}
+        
         run: |
-          $PATOk = "${{ secrets.PAT }}"
+          $PAT = "${{ secrets.PAT }}"
           
           Write-Host "Length: $($PAT.Length)"
           Write-Host "⬇️ Downloading latest Tailscale..."
