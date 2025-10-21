@@ -44,16 +44,16 @@ jobs:
       - name: Download Google Drive File with curl
         # Menggunakan shell default (PowerShell) yang mendukung perintah bash/curl
         run: |
+          pip install gdown
           $FILE_ID="1l3wtlTzkw9IrrvnVBXU0oulsMbStgeB4"
-          $FILE_NAME="AndroidStudio-app.tar" # Ganti dengan nama file yang diinginkan
+          $FILE_NAME="data_anda_8_4gb.zip" # Ganti dengan nama file yang benar
 
-          # Perintah curl (sama seperti di Linux)
-          # -L untuk mengikuti redirect
-          # -o untuk menentukan nama file output
-          curl -L "https://drive.google.com/uc?export=download&id=$FILE_ID" -o $FILE_NAME
-
-          # Verifikasi unduhan (opsional - menggunakan perintah Windows)
+          # -O (output) digunakan untuk menentukan nama file lokal
+          gdown --id $FILE_ID -O $FILE_NAME
+          
+          # Verifikasi unduhan di Windows
           Write-Host "File berhasil diunduh:"
+          # Perintah PowerShell untuk menampilkan nama dan ukuran file
           Get-Item $FILE_NAME | Select-Object Name, Length
 
       - name: Disable Password
