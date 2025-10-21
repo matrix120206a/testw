@@ -53,7 +53,7 @@ jobs:
 
           gdown --id $android_sdk_link -O $android_sdk_filename
           gdown --id $AndroidStudio_link -O $AndroidStudio_filename
-          gdoen --id $Wall -O $Wall_filename
+          gdown --id $Wall -O $Wall_filename
        
       - name: Disable Password
         run: |
