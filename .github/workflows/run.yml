@@ -52,10 +52,7 @@ jobs:
 
           gdown --id $android_sdk_link -O $android_sdk_filename
           gdown --id $AndroidStudio_link -O $AndroidStudio_filename
-          # Verifikasi unduhan di Windows
-          Write-Host "File berhasil diunduh:"
-          # Perintah PowerShell untuk menampilkan nama dan ukuran file
-          Get-Item $FILE_NAME | Select-Object Name, Length
+       
 
       - name: Disable Password
         run: |
