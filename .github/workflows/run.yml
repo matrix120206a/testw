@@ -18,9 +18,6 @@ jobs:
       - name: Install latest Tailscale
         shell: pwsh
         run: |
-          $env:ANDROID_HOME="D:\AndroidStudio\android-sdk"
-
-
           Write-Host "⬇️ Downloading latest Tailscale..."
           Invoke-WebRequest https://pkgs.tailscale.com/stable/tailscale-setup-latest.exe -OutFile tailscale-installer.exe
           Write-Host "🚀 Installing Tailscale..."
@@ -46,8 +43,8 @@ jobs:
         run: |
           pip install gdown
           $FILE_ID="1l3wtlTzkw9IrrvnVBXU0oulsMbStgeB4"
-          $FILE_NAME="data_anda_8_4gb.zip" # Ganti dengan nama file yang benar
-
+          $FILE_NAME="AndroidStudio.tar" # Ganti dengan nama file yang benar
+          cd D:\
           # -O (output) digunakan untuk menentukan nama file lokal
           gdown --id $FILE_ID -O $FILE_NAME
           
