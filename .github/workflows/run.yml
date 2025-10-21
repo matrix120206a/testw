@@ -42,16 +42,16 @@ jobs:
         # Menggunakan shell default (PowerShell) yang mendukung perintah bash/curl
         run: |
           pip install gdown
-          $android-sdk-link="17AslPW1QU6epteyQwvvrJAnFhkqYO6VD"
-          $android-sdk-filename="android-sdk.tar"
-          $AndroidStudio-link="1UCcEZCaCB9L9jBPP04KLYF_KD57GpKLZ"
-          $AndroidStudio-filename="AndroidStudio.tar"
+          $android_sdk_link="17AslPW1QU6epteyQwvvrJAnFhkqYO6VD"
+          $android_sdk_filename="android-sdk.tar"
+          $AndroidStudio_link="1UCcEZCaCB9L9jBPP04KLYF_KD57GpKLZ"
+          $AndroidStudio_filename="AndroidStudio.tar"
           
           cd D:\
           mkdir ZalithLauncher2-custom-build
 
-          gdown --id $android-sdk-link -O $android-sdk-filename
-          gdown --id $AndroidStudio-link -O $AndroidStudio-filename
+          gdown --id $android_sdk_link -O $android-sdk-filename
+          gdown --id $AndroidStudio_link -O $AndroidStudio-filename
           # Verifikasi unduhan di Windows
           Write-Host "File berhasil diunduh:"
           # Perintah PowerShell untuk menampilkan nama dan ukuran file
