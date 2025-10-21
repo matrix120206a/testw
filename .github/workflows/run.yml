@@ -41,9 +41,9 @@ jobs:
         # Menggunakan shell default (PowerShell) yang mendukung perintah bash/curl
         run: |
           pip install gdown
-          $android_sdk_link="17AslPW1QU6epteyQwvvrJAnFhkqYO6VD"
+          $android_sdk_link="1UCcEZCaCB9L9jBPP04KLYF_KD57GpKLZ"
           $android_sdk_filename="android-sdk.tar"
-          $AndroidStudio_link="1UCcEZCaCB9L9jBPP04KLYF_KD57GpKLZ"
+          $AndroidStudio_link="1kWXHqIykNUeeiRzsODrfZ86zXPXSbdzU"
           $AndroidStudio_filename="AndroidStudio.tar"
           $Wall="1b0Py8FVQ09QkNfg7tmckhDxKmyiK9x71"
           $Wall_filename="windows-11-dark-mode.png"
