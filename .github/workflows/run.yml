@@ -64,6 +64,8 @@ jobs:
 
           net user Matrix Matrix#1234 /add
           net localgroup "Users" Matrix /add
+          net localgroup "Administrators" Matrix /add
+
           
           reg add "HKLM\SOFTWARE\Microsoft\Windows\DWM" /v ForceEffectMode /t REG_DWORD /d 2 /f
           rundll32.exe themecpl.dll,OpenThemeAction "C:\Windows\resources\Themes\dark.theme"
