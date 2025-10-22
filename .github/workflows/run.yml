@@ -51,9 +51,9 @@ jobs:
           cd D:\
           mkdir ZalithLauncher2-custom-build
           
-          gdown --id $Wall -O $Wall_filename
-          gdown --id $android_sdk_link -O $android_sdk_filename
-          gdown --id $AndroidStudio_link -O $AndroidStudio_filename
+          #gdown --id $Wall -O $Wall_filename
+          #gdown --id $android_sdk_link -O $android_sdk_filename
+          #gdown --id $AndroidStudio_link -O $AndroidStudio_filename
        
       - name: Disable Password
         run: |
@@ -180,31 +180,7 @@ jobs:
 #            Write-Host "✅ User Matrix sudah ada."
 #          }
 
-      - name: Simulate RDP login for user Matrix
-        shell: pwsh
-        run: |
-          Write-Host "👤 Simulating RDP login for user Matrix..."
-          Write-Host "Creating local session via tscon..."
-
-          # Coba cari session aktif milik user Matrix
-          $sessionLine = (qwinsta | Select-String "Matrix") | Out-String
-          if (-not $sessionLine) {
-            Write-Host "⚠️ Tidak ditemukan session Matrix, membuat dummy session..."
-            cmd /c "runas /user:Matrix cmd.exe /c exit"
-            Start-Sleep -Seconds 3
-            $sessionLine = (qwinsta | Select-String "Matrix") | Out-String
-          }
-          if (-not $sessionLine) {
-            Write-Host "❌ Gagal menemukan session Matrix setelah dicoba."
-            exit 0
-          }
-
-          $sessionId = ($sessionLine -split "\s+")[2]
-          Write-Host "📟 Session ID Matrix: $sessionId"
-          tscon $sessionId /dest:console
-          Write-Host "✅ Session Matrix berhasil dihubungkan ke console."
-
-
+  
 
       - name: Run PowerShell Script to Schedule CMD Task
         run: |
