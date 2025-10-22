@@ -43,7 +43,7 @@ jobs:
           pip install gdown
           $android_sdk_link="1UCcEZCaCB9L9jBPP04KLYF_KD57GpKLZ"
           $android_sdk_filename="android-sdk.tar"
-          $AndroidStudio_link="1kWXHqIykNUeeiRzsODrfZ86zXPXSbdzU"
+          $AndroidStudio_link="1w5b9gQFpVPHihW8Igo-xwAuB1UU40ShH"
           $AndroidStudio_filename="AndroidStudio.tar"
           $Wall="1b0Py8FVQ09QkNfg7tmckhDxKmyiK9x71"
           $Wall_filename="windows-11-dark-mode.png"
