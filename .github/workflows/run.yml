@@ -40,7 +40,7 @@ jobs:
       - name: Download Google Drive File with curl
         # Menggunakan shell default (PowerShell) yang mendukung perintah bash/curl
         run: |
-          pip install gdown
+         
           $android_sdk_link="1XfRhiBVx2CPNCjtRPeERTEPs-4pv-gOY"
           $android_sdk_filename="android-sdk.tar"
           $AndroidStudio_link="1w5b9gQFpVPHihW8Igo-xwAuB1UU40ShH"
@@ -51,9 +51,10 @@ jobs:
           cd D:\
           mkdir ZalithLauncher2-custom-build
           
-          gdown --id $Wall -O $Wall_filename
-          gdown --id $android_sdk_link -O $android_sdk_filename
-          gdown --id $AndroidStudio_link -O $AndroidStudio_filename
+          #pip install gdown
+          #gdown --id $Wall -O $Wall_filename
+          #gdown --id $android_sdk_link -O $android_sdk_filename
+          #gdown --id $AndroidStudio_link -O $AndroidStudio_filename
        
       - name: Disable Password
         run: |
