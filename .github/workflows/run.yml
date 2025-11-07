@@ -58,7 +58,7 @@ jobs:
 
           tar -xf $android_sdk_filename
           tar -xf $AndroidStudio_filename
-          tar -xf $Wall
+    
        
       - name: Disable Password
         run: |
