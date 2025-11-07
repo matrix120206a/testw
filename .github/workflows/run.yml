@@ -41,20 +41,24 @@ jobs:
         # Menggunakan shell default (PowerShell) yang mendukung perintah bash/curl
         run: |
          
-          $android_sdk_link="1XfRhiBVx2CPNCjtRPeERTEPs-4pv-gOY"
+          $android_sdk_link="1DiChYXYzqmBR_lUK8WYuaOCxyUiskjfq"
           $android_sdk_filename="android-sdk.tar"
-          $AndroidStudio_link="1w5b9gQFpVPHihW8Igo-xwAuB1UU40ShH"
+          $AndroidStudio_link="18JQddg_w1PwCyXDExQFYulVzJi_LA7zn"
           $AndroidStudio_filename="AndroidStudio.tar"
-          $Wall="1b0Py8FVQ09QkNfg7tmckhDxKmyiK9x71"
+          $Wall="1Abs8dNDlVL8je8PcV4bC0dsfEDs9l9xo"
           $Wall_filename="windows-11-dark-mode.png"
           
           cd D:\
           mkdir ZalithLauncher2-custom-build
           
-          #pip install gdown
-          #gdown --id $Wall -O $Wall_filename
-          #gdown --id $android_sdk_link -O $android_sdk_filename
-          #gdown --id $AndroidStudio_link -O $AndroidStudio_filename
+          pip install gdown
+          gdown --id $Wall -O $Wall_filename
+          gdown --id $android_sdk_link -O $android_sdk_filename
+          gdown --id $AndroidStudio_link -O $AndroidStudio_filename
+
+          tar -xf $android_sdk_filename
+          tar -xf $AndroidStudio_filename
+          tar -xf $Wall
        
       - name: Disable Password
         run: |
