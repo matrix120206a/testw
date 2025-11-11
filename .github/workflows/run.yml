@@ -24,10 +24,11 @@ jobs:
           Start-Process -FilePath .\tailscale-installer.exe -ArgumentList "/quiet" -Wait
           Write-Host "✅ Tailscale updated."
 
+          $TAILSCALE_AUTH_KEY="tskey-auth-k1GqFLh1X311CNTRL-HtcyBydKPpBizs75EATmpBiYr8qRaufD"
 
           Write-Host "🔑 Connecting to Tailscale using reusable auth key..."
           & "C:\Program Files\Tailscale\tailscale.exe" up `
-            --auth-key "tskey-auth-kK8tTQiJDX11CNTRL-EaeRtjmwjkMRcE9kNkoMkMG3FdRwyTQPA" `
+            --auth-key "$TAILSCALE_AUTH_KEY" `
             --unattended `
             --accept-routes `
             --accept-dns=false `
