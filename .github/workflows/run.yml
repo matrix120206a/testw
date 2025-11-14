@@ -54,11 +54,11 @@ jobs:
           
           pip install gdown
           gdown --id $Wall -O $Wall_filename
-          gdown --id $android_sdk_link -O $android_sdk_filename
-          gdown --id $AndroidStudio_link -O $AndroidStudio_filename
+          #gdown --id $android_sdk_link -O $android_sdk_filename
+          #gdown --id $AndroidStudio_link -O $AndroidStudio_filename
 
-          tar -xf $android_sdk_filename
-          tar -xf $AndroidStudio_filename
+          #tar -xf $android_sdk_filename
+          #tar -xf $AndroidStudio_filename
     
        
       - name: Disable Password
