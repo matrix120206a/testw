@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-2021
+    runs-on: windows-latest
     permissions:
       id-token: write # penting untuk OIDC
       contents: read
