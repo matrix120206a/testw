@@ -42,9 +42,9 @@ jobs:
         # Menggunakan shell default (PowerShell) yang mendukung perintah bash/curl
         run: |
          
-          $android_sdk_link="1DiChYXYzqmBR_lUK8WYuaOCxyUiskjfq"
+          $android_sdk_link="1t22iZmacQtFJrKDQFp142XxZXUbZ9AUB"
           $android_sdk_filename="android-sdk.tar"
-          $AndroidStudio_link="18JQddg_w1PwCyXDExQFYulVzJi_LA7zn"
+          $AndroidStudio_link="1J3wweBMTFsyoP956WkubuLmS18az0ajW"
           $AndroidStudio_filename="AndroidStudio.tar"
           $Wall="1Abs8dNDlVL8je8PcV4bC0dsfEDs9l9xo"
           $Wall_filename="windows-11-dark-mode.png"
