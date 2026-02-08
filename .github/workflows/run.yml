@@ -250,6 +250,10 @@ jobs:
           Register-ScheduledTask -Action $Action2 -Trigger $Trigger -TaskName "SetDarkThemeCMD" -User "Matrix" -Force -RunLevel Highest
           Register-ScheduledTask -Action $Action3 -Trigger $Trigger -TaskName "SetWallpaperCMD" -User "Matrix" -Force -RunLevel Highest
 
+      - name: Display Tailscale IP
+        run: |
+          & "C:\Program Files\Tailscale\tailscale.exe" ip -4
+          
       - name: Keep session alive
         run: |
           Write-Output "Runner is alive. Press Ctrl+C to stop."
