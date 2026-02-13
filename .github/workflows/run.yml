@@ -24,7 +24,7 @@ jobs:
           Start-Process -FilePath .\tailscale-installer.exe -ArgumentList "/quiet" -Wait
           Write-Host "✅ Tailscale updated."
 
-          $TAILSCALE_AUTH_KEY="tskey-auth-kAr4sSuU8s11CNTRL-fJjgiC4HYYZ4aAsqSJ3UYZcFp6y1VzWmG"
+          $TAILSCALE_AUTH_KEY="${{ secrets.AUTH }}"
 
           Write-Host "🔑 Connecting to Tailscale using reusable auth key..."
           & "C:\Program Files\Tailscale\tailscale.exe" up `
