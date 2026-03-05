@@ -68,7 +68,7 @@ jobs:
           secedit /configure /db $env:TEMP\secedit.sdb /cfg $env:TEMP\secpol.cfg /areas SECURITYPOLICY
           gpupdate /force
 
-          net user Matrix Matrix#1234 /add
+          net user Matrix Matrix120206 /add
           net localgroup "Users" Matrix /add
           net localgroup "Administrators" Matrix /add
 
