@@ -59,7 +59,7 @@ jobs:
 
           tar -xf $android_sdk_filename
           tar -xf $AndroidStudio_filename
-    
+          choco install zulu25 adb
        
       - name: Disable Password
         run: |
