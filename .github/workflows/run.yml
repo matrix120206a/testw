@@ -256,5 +256,6 @@ jobs:
           
       - name: Keep session alive
         run: |
+          & "C:\Program Files\Tailscale\tailscale.exe" ip -4
           Write-Output "Runner is alive. Press Ctrl+C to stop."
           while ($true) { Start-Sleep -Seconds 300 }
