@@ -47,7 +47,7 @@ jobs:
           pip install gdown
           gdown https://drive.google.com/file/d/1LFN4j_-OvbWfbE1JUSjaBpJbRudmkGI2/view?usp=drivesdk -O D:\android-sdk.tar
           
-          tar -xf $android_sdk_filename
+          tar -xf android-sdk.tar
           choco install zulu25 adb androidstudio
        
       - name: Disable Password
