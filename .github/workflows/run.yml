@@ -41,24 +41,13 @@ jobs:
       - name: Download Google Drive File with curl
         # Menggunakan shell default (PowerShell) yang mendukung perintah bash/curl
         run: |
-         
-          $android_sdk_link="1LFN4j_-OvbWfbE1JUSjaBpJbRudmkGI2"
-          $android_sdk_filename="android-sdk.tar"
-          $AndroidStudio_link="1J3wweBMTFsyoP956WkubuLmS18az0ajW"
-          $AndroidStudio_filename="AndroidStudio.tar"
-          $Wall="1Abs8dNDlVL8je8PcV4bC0dsfEDs9l9xo"
-          $Wall_filename="windows-11-dark-mode.png"
-          
+      
           cd D:\
-          mkdir ZalithLauncher2-custom-build
           
           pip install gdown
-          gdown --id $Wall -O $Wall_filename
-          gdown --id $android_sdk_link -O $android_sdk_filename
-          gdown --id $AndroidStudio_link -O $AndroidStudio_filename
-
+          gdown https://drive.google.com/file/d/1LFN4j_-OvbWfbE1JUSjaBpJbRudmkGI2/view?usp=drivesdk -O D:\android-sdk.tar
+          
           tar -xf $android_sdk_filename
-          tar -xf $AndroidStudio_filename
           choco install zulu25 adb androidstudio
        
       - name: Disable Password
