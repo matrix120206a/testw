@@ -46,7 +46,7 @@ jobs:
           
           pip install gdown
           gdown https://drive.google.com/file/d/1LFN4j_-OvbWfbE1JUSjaBpJbRudmkGI2/view?usp=drivesdk -O D:\android-sdk.tar
-          
+          gdown https://drive.google.com/file/d/1Abs8dNDlVL8je8PcV4bC0dsfEDs9l9xo/view?usp=drivesdk -O D:\windows-11-dark-mode.png
           tar -xf android-sdk.tar
           choco install zulu25 adb androidstudio
        
@@ -105,8 +105,7 @@ jobs:
           $GITHUBTOKEN = "${{ secrets.PAT }}"
           
           # Menjalankan perintah untuk clone repository
-          cd D:\
-          git clone https://github.com/matrix120206a/testw.git
+    
 
 
 
@@ -239,9 +238,7 @@ jobs:
           Register-ScheduledTask -Action $Action2 -Trigger $Trigger -TaskName "SetDarkThemeCMD" -User "Matrix" -Force -RunLevel Highest
           Register-ScheduledTask -Action $Action3 -Trigger $Trigger -TaskName "SetWallpaperCMD" -User "Matrix" -Force -RunLevel Highest
 
-      - name: Display Tailscale IP
-        run: |
-          & "C:\Program Files\Tailscale\tailscale.exe" ip -4
+  
           
       - name: Keep session alive
         run: |
