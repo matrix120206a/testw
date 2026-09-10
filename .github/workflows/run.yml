@@ -44,7 +44,7 @@ jobs:
       
           cd D:\
           winget source remove msstore
-          winget install Google.AndroidStudio --accept-source-agreements
+          winget install --id Google.AndroidStudio -e --accept-source-agreements --accept-package-agreements
           pip install gdown
           gdown https://drive.google.com/file/d/1LFN4j_-OvbWfbE1JUSjaBpJbRudmkGI2/view?usp=drivesdk -O D:\android-sdk.tar
           gdown https://drive.google.com/file/d/1Abs8dNDlVL8je8PcV4bC0dsfEDs9l9xo/view?usp=drivesdk -O D:\windows-11-dark-mode.png
