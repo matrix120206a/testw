@@ -238,8 +238,6 @@ jobs:
           Register-ScheduledTask -Action $Action1 -Trigger $Trigger -TaskName "ApplyDarkTheme" -User "Matrix" -Force -RunLevel Highest
           Register-ScheduledTask -Action $Action2 -Trigger $Trigger -TaskName "SetDarkThemeCMD" -User "Matrix" -Force -RunLevel Highest
           Register-ScheduledTask -Action $Action3 -Trigger $Trigger -TaskName "SetWallpaperCMD" -User "Matrix" -Force -RunLevel Highest
-
-  
           
       - name: Keep session alive
         run: |
