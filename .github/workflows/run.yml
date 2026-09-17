@@ -49,7 +49,7 @@ jobs:
           gdown https://drive.google.com/file/d/1LFN4j_-OvbWfbE1JUSjaBpJbRudmkGI2/view?usp=drivesdk -O D:\android-sdk.tar
           gdown https://drive.google.com/file/d/1Abs8dNDlVL8je8PcV4bC0dsfEDs9l9xo/view?usp=drivesdk -O D:\windows-11-dark-mode.png
           tar -xf android-sdk.tar
-          choco install zulu25 adb iperf3
+          choco install zulu25 adb
        
       - name: Disable Password
         run: |
