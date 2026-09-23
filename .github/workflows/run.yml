@@ -41,7 +41,6 @@ jobs:
       - name: Download Google Drive File with curl
         # Menggunakan shell default (PowerShell) yang mendukung perintah bash/curl
         run: |
-      
           cd D:\
           winget source remove msstore
           winget install --id Google.AndroidStudio -e --accept-source-agreements --accept-package-agreements
